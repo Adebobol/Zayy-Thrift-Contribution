@@ -7,11 +7,14 @@ import { UserService } from '../user/user.service';
 import { groupDto } from './dto/group.dto';
 import { memebrDto } from './dto/member.dto';
 import { Group } from './schemas/group.schema';
+import { GroupMember } from './schemas/groupMember.schema';
 
 @Injectable()
 export class GroupService {
   constructor(
     @InjectModel(Group.name) private readonly groupModel: Model<Group>,
+    @InjectModel(GroupMember.name)
+    private readonly memberModel: Model<GroupMember>,
     private userService: UserService,
   ) {}
 
@@ -47,7 +50,7 @@ export class GroupService {
 
   async join_group(groupId: string, memberData: memebrDto) {
     const groupInfo = await this.groupModel.findById(groupId).populate('admin');
-    // const {}
-    return groupInfo;
+    // const newMember = new this.
+    // return groupInfo;
   }
 }
