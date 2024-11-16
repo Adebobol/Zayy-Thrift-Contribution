@@ -34,11 +34,13 @@ export class GroupController {
     return this.groupService.getGroupByName(params);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('join_group/:id')
   async join_group(
     @Param('id') groupId: string,
+    @Request() req,
     @Body() memberData: memebrDto,
   ) {
-    return await this.groupService.join_group(groupId, memberData);
+    return await this.groupService.join_group(groupId, req.user);
   }
 }

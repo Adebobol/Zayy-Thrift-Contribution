@@ -24,7 +24,7 @@ export class GroupService {
     const newGroup = new this.groupModel({
       name: groupData.name,
       description: groupData.description,
-      admin: creator.name,
+      admin: userData.id,
       contribType: groupData.contributionType,
     });
 
@@ -48,9 +48,23 @@ export class GroupService {
     return with_name_data;
   }
 
-  async join_group(groupId: string, memberData: memebrDto) {
-    const groupInfo = await this.groupModel.findById(groupId).populate('admin');
-    // const newMember = new this.
-    // return groupInfo;
+  async join_group(groupId: string, member) {
+    const groupInfo = await this.groupModel.findById(groupId);
+    if (!groupInfo) throw new NotFoundException('Group not found');
+    if (groupInfo.admin == member.id) {
+      const newMember = new this.memberModel({
+        group: groupId,
+        nameOfMember: member.id,
+        position: 'Member',
+      });
+      return await newMember.save();
+    }
+    //   throw new BadRequestException('Admin already a member.');
+
+    // const newMember = new this.memberModel({
+    //   group: groupId,
+    //   nameOfMember: member.id,
+    // });
+    // return newMember;
   }
 }
