@@ -34,6 +34,11 @@ export class GroupController {
     return this.groupService.getGroupByName(params);
   }
 
+  @Get('all')
+  async getAllGroups() {
+    return await this.groupService.getAllGroups();
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post('join_group/:id')
   async join_group(
@@ -42,5 +47,17 @@ export class GroupController {
     @Body() memberData: memebrDto,
   ) {
     return await this.groupService.join_group(groupId, req.user);
+  }
+  @Post(':id/pay_contribution')
+  async make_contribution(
+    @Param('id') groupId: string,
+    @Body() contributionData,
+    @Request() req,
+  ) {
+    return await this.groupService.pay_contribution(
+      groupId,
+      req.user,
+      contributionData,
+    );
   }
 }

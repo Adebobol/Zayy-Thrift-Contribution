@@ -48,23 +48,35 @@ export class GroupService {
     return with_name_data;
   }
 
+  async getAllGroups() {
+    return await this.groupModel.find();
+  }
+
   async join_group(groupId: string, member) {
     const groupInfo = await this.groupModel.findById(groupId);
     if (!groupInfo) throw new NotFoundException('Group not found');
-    if (groupInfo.admin == member.id) {
+    if (groupInfo.admin == member.name) {
       const newMember = new this.memberModel({
         group: groupId,
         nameOfMember: member.id,
         position: 'Member',
       });
-      return await newMember.save();
+      await newMember.save();
     }
-    //   throw new BadRequestException('Admin already a member.');
+    if (groupInfo.members.indexOf(member.id) === -1) {
+      console.log('not a member');
+      groupInfo.members.push(member.id);
+      groupInfo.save();
+    } else console.log('already a member');
 
-    // const newMember = new this.memberModel({
-    //   group: groupId,
-    //   nameOfMember: member.id,
-    // });
-    // return newMember;
+    return await this.groupModel.findById(groupId);
+  }
+
+  async pay_contribution(
+    groupId,
+    memberId: string,
+    contributionData,
+  ): Promise<null> {
+    return await this.memberModel.findById(memberId);
   }
 }

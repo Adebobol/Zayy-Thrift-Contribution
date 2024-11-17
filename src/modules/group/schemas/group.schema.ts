@@ -25,7 +25,10 @@ export class Group {
   @Prop()
   admin: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  @Prop({
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    default: [],
+  })
   members: User[];
 
   @Prop({ default: 1 })
