@@ -55,14 +55,14 @@ export class GroupService {
   async join_group(groupId: string, member) {
     const groupInfo = await this.groupModel.findById(groupId);
     if (!groupInfo) throw new NotFoundException('Group not found');
-    if (groupInfo.admin == member.name) {
-      const newMember = new this.memberModel({
-        group: groupId,
-        nameOfMember: member.id,
-        position: 'Member',
-      });
-      await newMember.save();
-    }
+    // if (groupInfo.admin == member.name) {
+    const newMember = new this.memberModel({
+      group: groupId,
+      nameOfMember: member.id,
+      position: 'Member',
+    });
+    await newMember.save();
+    // }
     if (groupInfo.members.indexOf(member.id) === -1) {
       console.log('not a member');
       groupInfo.members.push(member.id);
@@ -72,11 +72,7 @@ export class GroupService {
     return await this.groupModel.findById(groupId);
   }
 
-  async pay_contribution(
-    groupId,
-    memberId: string,
-    contributionData,
-  ): Promise<null> {
-    return await this.memberModel.findById(memberId);
+  async pay_contribution(member) {
+    return await this.memberModel.find({ nameOfMember: member.id });
   }
 }

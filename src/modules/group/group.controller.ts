@@ -48,16 +48,10 @@ export class GroupController {
   ) {
     return await this.groupService.join_group(groupId, req.user);
   }
-  @Post(':id/pay_contribution')
-  async make_contribution(
-    @Param('id') groupId: string,
-    @Body() contributionData,
-    @Request() req,
-  ) {
-    return await this.groupService.pay_contribution(
-      groupId,
-      req.user,
-      contributionData,
-    );
+
+  @UseGuards(JwtAuthGuard)
+  @Post('pay_contribution')
+  async make_contribution(@Request() req) {
+    return await this.groupService.pay_contribution(req.user);
   }
 }
